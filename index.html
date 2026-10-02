@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta property="og:title" content="Конвейер — подрядчик для агентств">
+<meta property="og:description" content="Python-автоматизация, разбор документов, Telegram-боты с ИИ, веб-системы и ИИ-ролики под бренд агентства">
+<title>Конвейер</title>
+<meta name="description" content="Python-автоматизация, разбор документов, Telegram-боты с ИИ, веб-системы и ИИ-ролики под бренд агентства">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Раскладка: паспорт изделия — левая колонка с метками в моноширинном, правая с текстом; сигнальные лампы сторожа как сквозной мотив */
+:root{
+  --paper:#F2F3EF; --panel:#FFFFFF; --ink:#15181B; --muted:#565E66; --line:#D3D7D2; --soft:#E7E9E4;
+  --signal:#E0A100; --ok:#1E9A52; --warn:#D99A00; --bad:#D2402F; --code:#1B1F23; --code-fg:#D9DED8;
+  --display:"Unbounded","Arial Black",system-ui,sans-serif;
+  --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
+  --wrap:1120px; --gut:clamp(16px,4vw,40px);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#101315; --panel:#171B1E; --ink:#E7EAE5; --muted:#9BA4AB; --line:#2A3035; --soft:#1D2226;
+  --signal:#F0B21A; --ok:#36B56C; --warn:#F0B21A; --bad:#E85A48; --code:#0B0D0F; --code-fg:#D9DED8; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#101315; --panel:#171B1E; --ink:#E7EAE5; --muted:#9BA4AB; --line:#2A3035; --soft:#1D2226;
+  --signal:#F0B21A; --ok:#36B56C; --warn:#F0B21A; --bad:#E85A48; --code:#0B0D0F; --code-fg:#D9DED8; color-scheme:dark}
+
+*{box-sizing:border-box}
+body{background:var(--paper);color:var(--ink);font-family:var(--body);font-size:16.5px;line-height:1.6;margin:0}
+.wrap{max-width:var(--wrap);margin:0 auto;padding-inline:var(--gut)}
+a{color:inherit;text-decoration-color:var(--signal);text-decoration-thickness:2px;text-underline-offset:3px}
+a:focus-visible,button:focus-visible{outline:3px solid var(--signal);outline-offset:3px;border-radius:2px}
+h1,h2,h3{text-wrap:balance;margin:0}
+p{margin:0}
+.mono{font-family:var(--mono)}
+.label{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.num{font-variant-numeric:tabular-nums}
+
+/* шапка */
+.top{border-bottom:1px solid var(--line);position:sticky;top:env(safe-area-inset-top,0px);background:var(--paper);z-index:5}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px;flex-wrap:wrap}
+.brand{font-family:var(--display);font-weight:700;font-size:17px;letter-spacing:.02em;display:flex;align-items:center;gap:10px}
+.brand i{width:10px;height:10px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--ok) 22%,transparent)}
+.top nav{display:flex;gap:18px;flex-wrap:wrap;font-size:14px}
+.top nav a{text-decoration:none;color:var(--muted)}
+.top nav a:hover{color:var(--ink)}
+
+/* герой */
+.hero{padding-block:clamp(40px,7vw,84px) clamp(32px,5vw,56px);display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(28px,4vw,56px);align-items:start}
+.hero h1{font-family:var(--display);font-weight:700;font-size:clamp(30px,4.6vw,54px);line-height:1.08;letter-spacing:-.01em}
+.hero h1 em{font-style:normal;background:linear-gradient(transparent 62%,color-mix(in srgb,var(--signal) 55%,transparent) 62%)}
+.lead{margin-top:22px;font-size:clamp(17px,1.6vw,19px);color:var(--muted);max-width:58ch}
+.cta{margin-top:28px;display:flex;gap:12px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 18px;border-radius:4px;font-weight:600;text-decoration:none;border:1.5px solid var(--ink);font-size:15px}
+.btn.solid{background:var(--ink);color:var(--paper)}
+.btn.ghost{background:transparent}
+
+/* пульт сторожа */
+.pult{background:var(--code);color:var(--code-fg);border-radius:6px;padding:18px 18px 16px;font-family:var(--mono);font-size:13px;line-height:1.55;min-width:0}
+.pult .head{display:flex;justify-content:space-between;align-items:center;color:#8C969E;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:12px;gap:8px;flex-wrap:wrap}
+.lamps{display:flex;gap:8px}
+.lamp{width:12px;height:12px;border-radius:50%;opacity:.22}
+.lamp.g{background:#36B56C}.lamp.y{background:#F0B21A}.lamp.r{background:#E85A48}
+.lamp.on{opacity:1;box-shadow:0 0 10px currentColor}
+.lamp.g.on{color:#36B56C}.lamp.y.on{color:#F0B21A}.lamp.r.on{color:#E85A48}
+.pult pre{margin:0;white-space:pre-wrap;word-break:break-word}
+.pult .k{color:#8C969E}.pult .bad{color:#FF8A78}.pult .ok{color:#7FE0A3}.pult .warn{color:#FFD066}
+.pult .stat{margin-top:12px;padding-top:10px;border-top:1px dashed #2E353B;color:#8C969E;font-size:12px}
+.pult button{margin-top:12px;background:transparent;color:var(--code-fg);border:1px solid #3A434A;border-radius:3px;padding:6px 10px;font:inherit;font-size:12px;cursor:pointer}
+.pult button:hover{border-color:#F0B21A}
+
+/* полоса цифр */
+.figures{border-block:1px solid var(--line);display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.fig{padding:22px 20px 20px;border-right:1px solid var(--line);min-width:0}
+.fig:last-child{border-right:0}
+.fig b{display:block;font-family:var(--display);font-weight:500;font-size:clamp(26px,3vw,36px);line-height:1.1;font-variant-numeric:tabular-nums}
+.fig span{display:block;margin-top:6px;font-size:14px;color:var(--muted)}
+
+/* секции */
+section.block{padding-block:clamp(48px,7vw,88px) 0}
+.sec-head{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:24px;margin-bottom:32px;align-items:baseline}
+.sec-head h2{font-family:var(--display);font-weight:500;font-size:clamp(23px,2.6vw,32px);line-height:1.2}
+.sec-head p{grid-column:2;color:var(--muted);max-width:64ch;margin-top:10px}
+
+/* услуги */
+.services{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.svc{background:var(--panel);padding:22px 22px 20px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.svc h3{font-size:18px;font-weight:600;line-height:1.3}
+.svc p{color:var(--muted);font-size:15px}
+.svc .price{margin-top:auto;padding-top:10px;border-top:1px dashed var(--line);font-family:var(--mono);font-size:13px;display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+
+/* кейсы: паспорт */
+.case{border-top:2px solid var(--ink);padding-block:28px 8px;display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:24px}
+.case + .case{margin-top:40px}
+.case aside{display:flex;flex-direction:column;gap:14px;min-width:0}
+.case aside .no{font-family:var(--mono);font-size:13px;color:var(--muted)}
+.case aside .st{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:12.5px}
+.case aside .st i{width:9px;height:9px;border-radius:50%;background:var(--ok)}
+.case aside dl{margin:0;display:grid;gap:10px}
+.case aside dt{font-family:var(--mono);font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.case aside dd{margin:2px 0 0;font-size:14.5px}
+.case .body{min-width:0;display:flex;flex-direction:column;gap:18px}
+.case h3{font-family:var(--display);font-weight:500;font-size:clamp(21px,2.2vw,27px);line-height:1.2}
+.case .body > p{max-width:68ch}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:12px}
+.kpi{background:var(--soft);border-radius:4px;padding:14px 14px 12px;min-width:0}
+.kpi b{display:block;font-family:var(--display);font-weight:500;font-size:22px;line-height:1.15;font-variant-numeric:tabular-nums}
+.kpi span{display:block;font-size:13.5px;color:var(--muted);margin-top:4px}
+
+/* схема потока */
+.flow{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;font-family:var(--mono);font-size:12.5px}
+.flow div{border:1px solid var(--line);background:var(--panel);padding:10px 12px;flex:1 1 130px;min-width:0;position:relative}
+.flow div + div{border-left:0}
+.flow div small{display:block;color:var(--muted);font-size:11px;margin-top:3px}
+.flow div.stop{border-color:var(--bad);border-left:1px solid var(--bad);color:var(--bad)}
+
+/* таблица граблей */
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:4px}
+table{border-collapse:collapse;width:100%;min-width:560px;font-size:14.5px}
+th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--mono);font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:500;background:var(--soft)}
+tr:last-child td{border-bottom:0}
+td:first-child{width:34%;font-weight:500}
+
+.shot{border:1px solid var(--line);border-radius:6px;overflow:hidden;background:var(--panel)}
+.shot img{display:block;width:100%;height:auto}
+.shot figcaption{padding:10px 14px;font-size:13.5px;color:var(--muted);border-top:1px solid var(--line)}
+figure{margin:0}
+.stack{display:flex;flex-wrap:wrap;gap:6px}
+.stack span{font-family:var(--mono);font-size:12px;padding:3px 8px;border:1px solid var(--line);border-radius:3px;background:var(--panel)}
+
+/* процесс */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:0;border-top:1px solid var(--line)}
+.step{padding:20px 20px 4px 0;min-width:0}
+.step .n{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.step h3{font-size:17px;font-weight:600;margin-top:8px;line-height:1.3}
+.step p{color:var(--muted);font-size:14.5px;margin-top:6px}
+
+/* безопасность */
+.sec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px}
+.sec-card{border:1px solid var(--line);background:var(--panel);border-radius:4px;padding:20px;min-width:0}
+.sec-card h3{font-size:16.5px;font-weight:600;display:flex;gap:10px;align-items:center}
+.sec-card h3 i{flex:none;width:8px;height:8px;background:var(--ok);border-radius:1px}
+.sec-card ul{margin:10px 0 0;padding-left:18px;color:var(--muted);font-size:14.5px;display:grid;gap:6px}
+.note{margin-top:18px;font-size:14px;color:var(--muted);max-width:72ch}
+
+/* условия + контакты */
+.terms{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,240px),1fr));gap:1px;background:var(--line);border:1px solid var(--line)}
+.terms div{background:var(--panel);padding:18px 18px 16px;min-width:0}
+.terms b{display:block;font-size:15.5px}
+.terms span{display:block;color:var(--muted);font-size:14px;margin-top:4px}
+.contact{margin-block:clamp(48px,7vw,88px) 0;background:var(--code);color:var(--code-fg);border-radius:6px;padding:clamp(24px,4vw,44px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px}
+.contact h2{font-family:var(--display);font-weight:500;font-size:clamp(22px,2.6vw,30px);line-height:1.2;color:#F2F3EF}
+.contact p{color:#A8B1B8;margin-top:12px;max-width:52ch}
+.rows{display:grid;gap:10px;align-content:start}
+.row{display:flex;justify-content:space-between;align-items:center;gap:12px;border:1px solid #2E353B;border-radius:4px;padding:12px 14px;flex-wrap:wrap;min-width:0}
+.row .label{color:#8C969E}
+.row .v{font-family:var(--mono);font-size:14.5px;color:#F2F3EF;word-break:break-all}
+.row button{background:transparent;border:1px solid #3A434A;color:#D9DED8;border-radius:3px;padding:5px 10px;font:12px var(--mono);cursor:pointer}
+.row button:hover{border-color:#F0B21A}
+footer{padding-block:28px 40px;color:var(--muted);font-size:13px}
+
+@media (max-width:820px){
+  .hero{grid-template-columns:1fr}
+  .figures{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fig:nth-child(2){border-right:0}
+  .fig:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .sec-head,.case{grid-template-columns:1fr}
+  .sec-head p{grid-column:1}
+  .contact{grid-template-columns:1fr}
+  .top nav{display:none}
+}
+@media (prefers-reduced-motion:no-preference){
+  .lamp{transition:opacity .25s ease, box-shadow .25s ease}
+}
+</style>
+<style>body{margin:0}img{max-width:100%}</style>
+</head>
+<body>
+
+
+<header class="top">
+  <div class="wrap">
+    <div class="brand"><i aria-hidden="true"></i>Конвейер</div>
+    <nav aria-label="Разделы">
+      <a href="#uslugi">Что делаем</a>
+      <a href="#keysy">Кейсы</a>
+      <a href="#bezopasnost">Безопасность</a>
+      <a href="#usloviya">Условия</a>
+      <a href="#kontakty">Контакты</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <section class="hero" aria-labelledby="h1">
+    <div>
+      <div class="label">Подрядчик для агентств и студий · white-label</div>
+      <h1 id="h1" style="margin-top:14px">Делаем автоматизацию, которая <em>не молчит</em>, когда ломается</h1>
+      <p class="lead">Python-конвейеры для документов, Telegram-боты с ИИ, веб-системы и ИИ-ролики. Работаем под вашим брендом, с вашим клиентом напрямую не общаемся. Каждая система, которую мы сдаём, сама сообщает, если данных не хватило или процесс встал.</p>
+      <div class="cta">
+        <a class="btn solid" href="#kontakty">Прислать задачу</a>
+        <a class="btn ghost" href="#keysy">Смотреть кейсы</a>
+      </div>
+    </div>
+
+    <div class="pult" aria-label="Пример работы сторожа конвейера">
+      <div class="head">
+        <span>прогон · examples/demo.py</span>
+        <span class="lamps" aria-hidden="true"><i class="lamp g" id="lg"></i><i class="lamp y" id="ly"></i><i class="lamp r on" id="lr"></i></span>
+      </div>
+<pre id="log"><span class="k">комплект:</span> DEMO-001
+
+<span class="k">--- 1. Извлечение текста</span>
+   tz.docx        -> текст извлечён
+
+<span class="k">--- 2. Контроль полноты</span>
+   <span class="bad">НЕ ПРОЧИТАНО: smeta.pdf — PDF без текстового слоя (скан)</span>
+   <span class="bad">КРАСНЫЙ: решение принимать нельзя, комплект неполный</span>
+
+<span class="k">--- 4. Сторож конвейера</span>
+   до прогона:    <span class="bad">КРАСНЫЙ — прогона не было 53.6 ч</span>
+   после прогона: <span class="ok">ЗЕЛЁНЫЙ — обработано документов: 1</span></pre>
+      <div class="stat" id="lampText">Сейчас горит красный: смета пришла сканом, и система отказалась выносить вердикт по неполному комплекту.</div>
+      <button type="button" id="cycle">Переключить состояние сторожа</button>
+    </div>
+  </section>
+
+  <div class="figures" role="list">
+    <div class="fig" role="listitem"><b class="num">469</b><span>комплектов документов разобрано в продакшене</span></div>
+    <div class="fig" role="listitem"><b class="num">~150</b><span>модулей на Python в рабочей системе</span></div>
+    <div class="fig" role="listitem"><b class="num">2 дня</b><span>от пустой папки до прода веб-системы</span></div>
+    <div class="fig" role="listitem"><b class="num">24/7</b><span>боты и очереди живут без нашего компьютера</span></div>
+  </div>
+
+  <section class="block" id="uslugi" aria-labelledby="h-uslugi">
+    <div class="sec-head">
+      <div class="label">Что берём в работу</div>
+      <div>
+        <h2 id="h-uslugi">Пять направлений, в каждом есть работающая система</h2>
+        <p>Мы не берём задачи, которых ни разу не делали. Всё, что ниже, уже работает у нас в продакшене, поэтому срок и цену называем до начала работы.</p>
+      </div>
+    </div>
+    <div class="services">
+      <article class="svc">
+        <div class="label">PDF · DOCX · XLSX · DOC</div>
+        <h3>Разбор документов в таблицу или учётную систему</h3>
+        <p>Вынимаем нужные поля из пачки документов, включая таблицы, объединённые ячейки, колонтитулы и сноски. Отдаём вместе со списком того, что прочитать не удалось, и причиной по каждому файлу.</p>
+        <div class="price"><span>от 25 000 ₽</span><span>3–7 дней</span></div>
+      </article>
+      <article class="svc">
+        <div class="label">сбор · фильтр · сводка</div>
+        <h3>Мониторинг сайтов и порталов с отчётом в Telegram</h3>
+        <p>Ежедневный сбор по правилам заказчика и сводка в Telegram. Сторож отличает «сегодня ничего нет» от «сбор сломался», поэтому тишина не выдаёт себя за порядок.</p>
+        <div class="price"><span>от 20 000 ₽ + сопровождение</span><span>5–10 дней</span></div>
+      </article>
+      <article class="svc">
+        <div class="label">Telegram · LLM</div>
+        <h3>Telegram-боты с ИИ-агентом</h3>
+        <p>Бот отвечает с учётом прошлой переписки, ставит задачи, присылает отчёты и файлы. Живёт на сервере как служба, а не на чьём-то ноутбуке.</p>
+        <div class="price"><span>от 25 000 ₽</span><span>от 5 дней</span></div>
+      </article>
+      <article class="svc">
+        <div class="label">Next.js · Supabase</div>
+        <h3>Веб-системы и внутренние кабинеты</h3>
+        <p>Кабинеты с ролями, стадии задач, очередь фоновых заданий, графики и уведомления. Первую рабочую версию показываем быстро, потом доводим.</p>
+        <div class="price"><span>по задаче</span><span>MVP от 2 дней</span></div>
+      </article>
+      <article class="svc">
+        <div class="label">вертикальное видео · ИИ-аватар</div>
+        <h3>ИИ-ролики для клиентов агентства</h3>
+        <p>Сценарий по ролику, который уже набрал просмотры, озвучка, аватар, монтаж и субтитры. Первый ролик на вашего клиента делаем бесплатно.</p>
+        <div class="price"><span>цена под объём</span><span>3 рабочих дня</span></div>
+      </article>
+    </div>
+  </section>
+
+  <section class="block" id="keysy" aria-labelledby="h-keysy">
+    <div class="sec-head">
+      <div class="label">Кейсы</div>
+      <div>
+        <h2 id="h-keysy">Что уже работает и какие поломки мы в нём закрыли</h2>
+        <p>Цифры взяты из рабочих систем. Данные заказчиков в описаниях обезличены, код первой системы открыт.</p>
+      </div>
+    </div>
+
+    <article class="case" aria-labelledby="c1">
+      <aside>
+        <div class="no">Кейс 1 из 4</div>
+        <div class="st"><i aria-hidden="true"></i>в продакшене с августа 2026</div>
+        <dl>
+          <div><dt>Задача</dt><dd>Каждый день разбирать комплекты документов закупок и решать, браться ли за работу</dd></div>
+          <div><dt>Стек</dt><dd><div class="stack"><span>Python</span><span>pdfplumber</span><span>openpyxl</span><span>cron</span><span>Linux</span><span>Telegram Bot API</span><span>SQLite</span></div></dd></div>
+          <div><dt>Код</dt><dd><a href="https://github.com/Probudyvshysya/doc-pipeline">github.com/Probudyvshysya/doc-pipeline</a></dd></div>
+        </dl>
+      </aside>
+      <div class="body">
+        <h3 id="c1">Конвейер разбора документов, который не выносит вердикт по половине комплекта</h3>
+        <p>Раньше на один комплект уходили часы: прочитать задание, смету и проект договора, вынуть требования, посчитать экономику. Ошибка стоила денег, если контракт нельзя сдать за предложенную цену. Теперь система сама забирает документы по расписанию, разбирает все форматы своими парсерами, считает экономику и присылает в Telegram вердикт с обоснованием.</p>
+        <div class="flow" aria-label="Схема конвейера">
+          <div>сбор<small>по расписанию</small></div>
+          <div>извлечение<small>свои парсеры из XML</small></div>
+          <div class="stop">контроль полноты<small>стоп, если не всё прочитано</small></div>
+          <div>экономика<small>требования и цена</small></div>
+          <div>вердикт<small>в Telegram</small></div>
+          <div>журнал<small>прогноз и факт</small></div>
+        </div>
+        <div class="kpis">
+          <div class="kpi"><b class="num">469</b><span>комплектов разобрано</span></div>
+          <div class="kpi"><b class="num">455</b><span>объектов в базе</span></div>
+          <div class="kpi"><b class="num">3</b><span>состояния сторожа вместо двух</span></div>
+          <div class="kpi"><b class="num">1 мес.</b><span>от первого скрипта до работы по cron</span></div>
+        </div>
+        <div class="tbl">
+          <table>
+            <thead><tr><th>Что поймали на живых документах</th><th>Как закрыли</th></tr></thead>
+            <tbody>
+              <tr><td>Стандартная конвертация отдала <span class="num">712</span> символов вместо <span class="num">30 262</span>: всё задание было набрано таблицей</td><td>DOCX и XLSX читаются своим кодом прямо из XML, вместе с объединёнными ячейками, колонтитулами и сносками</td></tr>
+              <tr><td>Задание на 35 страниц пришло сканом, извлечение дало 48 байт, и документ получил вывод «требований нет»</td><td>Контроль полноты считает непрочитанное с причиной по каждому файлу. Пока список не пуст, решение не принимается</td></tr>
+              <tr><td>Ежедневный сбор пять суток стоял, хотя расписание отрабатывало и логи писались</td><td>Сторож с тремя состояниями. Метку свежести пишет только успешно завершённый проход, а не любое касание базы</td></tr>
+              <tr><td>Вывод сделали по тексту задания, а норматив, на который оно ссылалось, к тому времени заменили</td><td>Правило: если документ ссылается на норматив, норматив открывается и читается целиком</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </article>
+
+    <article class="case" aria-labelledby="c2">
+      <aside>
+        <div class="no">Кейс 2 из 4</div>
+        <div class="st"><i aria-hidden="true"></i>в продакшене с сентября 2026</div>
+        <dl>
+          <div><dt>Задача</dt><dd>Одно рабочее место для команды, которая делает ролики для клиентов: задачи, стадии, аналитика</dd></div>
+          <div><dt>Стек</dt><dd><div class="stack"><span>Next.js 16</span><span>Vercel</span><span>Supabase</span><span>PostgreSQL</span><span>Python-воркеры</span><span>LLM</span><span>GitHub Actions</span></div></dd></div>
+          <div><dt>Доступ</dt><dd>Репозиторий приватный: внутри данные клиентов. Показываем на созвоне</dd></div>
+        </dl>
+      </aside>
+      <div class="body">
+        <h3 id="c2">Веб-система ведения клиентов: от пустой папки до прода за два дня</h3>
+        <p>Кабинеты с ролями: у администратора одно рабочее место, у исполнителя другое. Ролик проходит пять стадий от сценария до публикации у клиента, по каждому переходу приходит уведомление в Telegram. Фоновые воркеры разбирают очередь заданий: снимают метрики с ролика по ссылке, предлагают вторую версию сценария, делают озвучку и пишут описания для трёх площадок. Очередь разбирается в облаке, поэтому система работает без включённого компьютера.</p>
+        <figure class="shot">
+          <img src="konveyer-glavnaya.png" alt="Главная страница системы: карточки с числом клиентов, просмотров, роликов и заявок, блоки «Конвейер сейчас» и «Ближайшие публикации», графики по дням" loading="lazy">
+          <figcaption>Главная «Наш результат». Данные живые и пересчитываются при каждом открытии. Где их пока мало, система пишет «копим данные» и не рисует пустой график.</figcaption>
+        </figure>
+        <div class="kpis">
+          <div class="kpi"><b class="num">2 дня</b><span>до первой версии в проде</span></div>
+          <div class="kpi"><b class="num">12</b><span>таблиц в базе, миграции</span></div>
+          <div class="kpi"><b class="num">5</b><span>стадий задачи с уведомлениями</span></div>
+          <div class="kpi"><b class="num">390 px</b><span>работает с телефона</span></div>
+        </div>
+        <p>Отдельный модуль собирает чужие ролики в нише клиента, считает, во сколько раз ролик обогнал обычный уровень автора, и отсеивает то, что не по теме. Из 68 залетевших роликов 60 разобраны моделью: 42 по теме, 18 мимо. Ещё 8 роликов без речи и подписи система честно пометила «смотреть глазами» и не стала сочинять описание.</p>
+      </div>
+    </article>
+
+    <article class="case" aria-labelledby="c3">
+      <aside>
+        <div class="no">Кейс 3 из 4</div>
+        <div class="st"><i aria-hidden="true"></i>работает круглосуточно с 28.09.2026</div>
+        <dl>
+          <div><dt>Задача</dt><dd>Отвечать на сообщения в рабочем чате в любое время и по делу</dd></div>
+          <div><dt>Стек</dt><dd><div class="stack"><span>Python</span><span>Telegram Bot API</span><span>systemd</span><span>Linux-сервер</span><span>LLM-агент</span></div></dd></div>
+        </dl>
+      </aside>
+      <div class="body">
+        <h3 id="c3">Telegram-бот с ИИ-агентом, которому не нужен оператор</h3>
+        <p>Бот и агент живут на сервере как две службы. На каждое входящее поднимается агент: читает последние 40 реплик и память по переписке, затем готовит ответ или задачу. Компьютер владельца для этого не нужен.</p>
+        <div class="tbl">
+          <table>
+            <thead><tr><th>Поломка</th><th>Решение</th></tr></thead>
+            <tbody>
+              <tr><td>Telegram отдаёт очередь входящих только одному читателю. Второй скрипт «проверить новые» уводил сообщение себе, и основной бот его не видел</td><td>Читатель один, на сервере. Остальные скрипты умеют только отправлять</td></tr>
+              <tr><td>Рабочие и личные сообщения шли через одного бота</td><td>Два бота с разными получателями: рабочее отдельно от личного</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </article>
+
+    <article class="case" aria-labelledby="c4">
+      <aside>
+        <div class="no">Кейс 4 из 4</div>
+        <div class="st"><i aria-hidden="true"></i>в работе с сентября 2026</div>
+        <dl>
+          <div><dt>Задача</dt><dd>Делать короткие ролики потоком и не зависеть от ручного монтажа в каждой мелочи</dd></div>
+          <div><dt>Стек</dt><dd><div class="stack"><span>Python</span><span>ffmpeg</span><span>Whisper</span><span>headless-браузер</span><span>TTS</span><span>ИИ-аватар</span></div></dd></div>
+        </dl>
+      </aside>
+      <div class="body">
+        <h3 id="c4">Сборка вертикальных роликов кодом</h3>
+        <p>Кадры рисуются в браузере и склеиваются через ffmpeg, добавляется озвучка и субтитры по два-три слова. Время для субтитров берём из распознавания речи, а сами слова из утверждённого текста, поэтому ошибок распознавания в подписях нет. Сценарий строим по структуре ролика, который уже набрал просмотры, и каждую фразу превращаем в отдельный кадр.</p>
+        <div class="flow" aria-label="Схема сборки ролика">
+          <div>донор<small>ролик с просмотрами</small></div>
+          <div>сценарий<small>утверждение</small></div>
+          <div>озвучка<small>и аватар</small></div>
+          <div>кадры<small>рендер в браузере</small></div>
+          <div>субтитры<small>тайминг из Whisper</small></div>
+        </div>
+        <p class="note" style="margin-top:0">Генерация аватара и озвучки запускается только после того, как утверждены донор и текст. Так платные кредиты не уходят на черновики.</p>
+      </div>
+    </article>
+  </section>
+
+  <section class="block" aria-labelledby="h-process">
+    <div class="sec-head">
+      <div class="label">Как идёт работа</div>
+      <div>
+        <h2 id="h-process">От задачи до сдачи</h2>
+        <p>Код пишется в паре с ИИ, проверяется и доводится нами на реальных данных. Главное в этой работе — отличить результат, который работает, от результата, который только выглядит правдоподобно.</p>
+      </div>
+    </div>
+    <div class="steps">
+      <div class="step"><div class="n">шаг 1</div><h3>Разбор задачи</h3><p>Вы присылаете задачу и пример данных. В тот же день называем срок и фиксированную цену.</p></div>
+      <div class="step"><div class="n">шаг 2</div><h3>Проба на ваших данных</h3><p>Для разбора документов берём 10–20 ваших файлов и показываем результат вместе с отчётом о пропусках.</p></div>
+      <div class="step"><div class="n">шаг 3</div><h3>Сборка и проверка</h3><p>Каждый модуль проверяем на живых данных, а не на удобном примере. Найденные поломки фиксируем в коде.</p></div>
+      <div class="step"><div class="n">шаг 4</div><h3>Сдача</h3><p>Передаём код, инструкцию запуска и сторожа, который сообщит, если что-то встало.</p></div>
+      <div class="step"><div class="n">шаг 5</div><h3>Сопровождение</h3><p>По желанию берём систему на поддержку с оплатой по месяцам.</p></div>
+    </div>
+  </section>
+
+  <section class="block" id="bezopasnost" aria-labelledby="h-sec">
+    <div class="sec-head">
+      <div class="label">Информационная безопасность</div>
+      <div>
+        <h2 id="h-sec">Что мы делаем с доступами и данными ваших клиентов</h2>
+        <p>Ниже то, что уже настроено в наших собственных системах. Те же правила применяем в проектах для заказчиков.</p>
+      </div>
+    </div>
+    <div class="sec-grid">
+      <div class="sec-card">
+        <h3><i aria-hidden="true"></i>Секреты отдельно от кода</h3>
+        <ul>
+          <li>Токены и ключи лежат в отдельном хранилище вне репозиториев и не попадают в git</li>
+          <li>В облаке ключи хранятся в GitHub Secrets и переменных окружения хостинга</li>
+          <li>ИИ-агенту запрещено читать файлы с секретами: запрет стоит на уровне инструмента, а не на честном слове</li>
+          <li>Логи чистятся от токенов, режимы отладки, которые печатают секреты, не включаются</li>
+        </ul>
+      </div>
+      <div class="sec-card">
+        <h3><i aria-hidden="true"></i>Серверы</h3>
+        <ul>
+          <li>Вход только по SSH-ключу, вход по паролю отключён</li>
+          <li>SSH на нестандартном порту, стандартный порт закрыт файрволом</li>
+          <li>fail2ban блокирует адреса, которые подбирают доступ</li>
+          <li>Отдельные ключи для каждого устройства, с которого идёт работа</li>
+        </ul>
+      </div>
+      <div class="sec-card">
+        <h3><i aria-hidden="true"></i>Базы и доступ людей</h3>
+        <ul>
+          <li>Row Level Security включён на таблицах: без входа база не отдаёт ни строки</li>
+          <li>Роли в интерфейсе: исполнитель видит только своё рабочее место</li>
+          <li>Пароль новому участнику показывается один раз, при входе</li>
+          <li>Доступ выдаётся и отзывается по одному человеку</li>
+        </ul>
+      </div>
+      <div class="sec-card">
+        <h3><i aria-hidden="true"></i>Данные клиентов агентства</h3>
+        <ul>
+          <li>Репозитории с данными клиентов приватные, в публичный код и портфолио попадает только обезличенное</li>
+          <li>Рабочие и личные каналы связи разведены: отдельные боты и отдельные аккаунты</li>
+          <li>С вашим клиентом напрямую не контактируем и не используем его материалы в своих кейсах</li>
+          <li>Подписываем NDA по вашей форме</li>
+        </ul>
+      </div>
+    </div>
+    <p class="note">Если в задаче есть персональные данные, до старта согласуем, где они будут храниться и обрабатываться, включая размещение на российском хостинге по требованиям 152-ФЗ.</p>
+  </section>
+
+  <section class="block" id="usloviya" aria-labelledby="h-terms">
+    <div class="sec-head">
+      <div class="label">Условия</div>
+      <div><h2 id="h-terms">Как мы работаем с агентствами</h2></div>
+    </div>
+    <div class="terms">
+      <div><b>Под вашим брендом</b><span>Результат уходит клиенту от вас, наше имя нигде не появляется</span></div>
+      <div><b>Договор с ИП</b><span>Акты и закрывающие документы, УСН без НДС</span></div>
+      <div><b>Фиксированная цена</b><span>Называем до начала. Оплата половина вперёд, половина по сдаче</span></div>
+      <div><b>Часовой пояс</b><span>Новосибирск, МСК+4. Работаем и по московскому времени</span></div>
+      <div><b>Бесплатная проба</b><span>Один ролик на вашего клиента или разбор 10–20 ваших документов</span></div>
+      <div><b>Ответ в тот же день</b><span>На присланную задачу называем срок и цену в день обращения</span></div>
+    </div>
+  </section>
+
+  <section class="contact" id="kontakty" aria-labelledby="h-contact">
+    <div>
+      <div class="label" style="color:#8C969E">Контакты</div>
+      <h2 id="h-contact" style="margin-top:10px">Пришлите одну задачу, которая сейчас лежит без исполнителя</h2>
+      <p>Документы, которые надо разобрать, клиент, которому нужны ролики, или бот, до которого не доходят руки. Посмотрим и в тот же день назовём срок и цену. Ни к чему не обязывает.</p>
+    </div>
+    <div class="rows">
+      <div class="row"><span class="label">Telegram</span><span class="v">@official_konveyer</span><button type="button" data-copy="@official_konveyer">Копировать</button></div>
+      <div class="row"><span class="label">Почта</span><span class="v">spyaschiyprobudilsya@gmail.com</span><button type="button" data-copy="spyaschiyprobudilsya@gmail.com">Копировать</button></div>
+      <div class="row"><span class="label">Код</span><span class="v"><a href="https://github.com/Probudyvshysya/doc-pipeline" style="color:inherit">github.com/Probudyvshysya</a></span></div>
+      <div class="row"><span class="label">Связь</span><span class="v"><a href="https://t.me/official_konveyer" style="color:inherit">t.me/official_konveyer</a></span></div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">Конвейер · Дмитрий Ермаков, ИП · Новосибирск · 2026</footer>
+
+<script>
+(function(){
+  var states=[
+    {on:'lr',txt:'Сейчас горит красный: смета пришла сканом, и система отказалась выносить вердикт по неполному комплекту.'},
+    {on:'ly',txt:'Жёлтый: прогон прошёл, но новых данных ноль. Это факт, а не поломка, и система пишет об этом отдельно.'},
+    {on:'lg',txt:'Зелёный: последний прогон завершился успешно, все документы комплекта прочитаны.'}
+  ];
+  var i=0;
+  var btn=document.getElementById('cycle');
+  if(btn){btn.addEventListener('click',function(){
+    i=(i+1)%states.length;
+    ['lr','ly','lg'].forEach(function(id){document.getElementById(id).classList.toggle('on',id===states[i].on)});
+    document.getElementById('lampText').textContent=states[i].txt;
+  });}
+  document.querySelectorAll('[data-copy]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var t=b.getAttribute('data-copy');
+      var done=function(){var o=b.textContent;b.textContent='Скопировано';setTimeout(function(){b.textContent=o},1500)};
+      try{navigator.clipboard.writeText(t).then(done,function(){sel(b)})}catch(e){sel(b)}
+    });
+  });
+  function sel(b){var v=b.parentNode.querySelector('.v');if(!v)return;var r=document.createRange();r.selectNodeContents(v);var s=window.getSelection();s.removeAllRanges();s.addRange(r);b.textContent='Выделено'}
+})();
+</script>
+
+</body>
+</html>
