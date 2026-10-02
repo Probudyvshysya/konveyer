@@ -240,7 +240,7 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:13px}
     <div class="sec-head">
       <div class="label">Что берём в работу</div>
       <div>
-        <h2 id="h-uslugi">Пять направлений, в каждом есть работающая система</h2>
+        <h2 id="h-uslugi">Шесть направлений, в каждом есть работающая система</h2>
         <p>Мы не берём задачи, которых ни разу не делали. Всё, что ниже, уже работает у нас в продакшене, поэтому срок и цену называем до начала работы.</p>
       </div>
     </div>
@@ -275,6 +275,12 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:13px}
         <p>Сценарий по ролику, который уже набрал просмотры, озвучка, аватар, монтаж и субтитры. Первый ролик на вашего клиента делаем бесплатно.</p>
         <div class="price"><span>цена под объём</span><span>3 рабочих дня</span></div>
       </article>
+      <article class="svc">
+        <div class="label">стройка · ремонт · голос</div>
+        <h3>Панель владельца из голосовых прорабов</h3>
+        <p>Прораб пишет голосовое в Telegram, а владелец видит выручку против плана, прогноз месяца и объекты по шести параметрам. <a href="https://probudyvshysya.github.io/konveyer/stroyka/">Демо</a>.</p>
+        <div class="price"><span>по задаче</span><span>пилот от 10 дней</span></div>
+      </article>
     </div>
   </section>
 
@@ -289,7 +295,7 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:13px}
 
     <article class="case" aria-labelledby="c1">
       <aside>
-        <div class="no">Кейс 1 из 4</div>
+        <div class="no">Кейс 1 из 5</div>
         <div class="st"><i aria-hidden="true"></i>в продакшене с августа 2026</div>
         <dl>
           <div><dt>Задача</dt><dd>Каждый день разбирать комплекты документов закупок и решать, браться ли за работу</dd></div>
@@ -330,7 +336,7 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:13px}
 
     <article class="case" aria-labelledby="c2">
       <aside>
-        <div class="no">Кейс 2 из 4</div>
+        <div class="no">Кейс 2 из 5</div>
         <div class="st"><i aria-hidden="true"></i>в продакшене с сентября 2026</div>
         <dl>
           <div><dt>Задача</dt><dd>Одно рабочее место для команды, которая делает ролики для клиентов: задачи, стадии, аналитика</dd></div>
@@ -357,7 +363,7 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:13px}
 
     <article class="case" aria-labelledby="c3">
       <aside>
-        <div class="no">Кейс 3 из 4</div>
+        <div class="no">Кейс 3 из 5</div>
         <div class="st"><i aria-hidden="true"></i>работает круглосуточно с 28.09.2026</div>
         <dl>
           <div><dt>Задача</dt><dd>Отвечать на сообщения в рабочем чате в любое время и по делу</dd></div>
@@ -381,7 +387,7 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:13px}
 
     <article class="case" aria-labelledby="c4">
       <aside>
-        <div class="no">Кейс 4 из 4</div>
+        <div class="no">Кейс 4 из 5</div>
         <div class="st"><i aria-hidden="true"></i>в работе с сентября 2026</div>
         <dl>
           <div><dt>Задача</dt><dd>Делать короткие ролики потоком и не зависеть от ручного монтажа в каждой мелочи</dd></div>
@@ -399,6 +405,29 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:13px}
           <div>субтитры<small>тайминг из Whisper</small></div>
         </div>
         <p class="note" style="margin-top:0">Генерация аватара и озвучки запускается только после того, как утверждены донор и текст. Так платные кредиты не уходят на черновики.</p>
+      </div>
+    </article>
+    <article class="case" aria-labelledby="c5">
+      <aside>
+        <div class="no">Кейс 5 из 5</div>
+        <div class="st"><i aria-hidden="true" style="background:var(--signal)"></i>демо, можно потрогать</div>
+        <dl>
+          <div><dt>Для кого</dt><dd>Строительные и ремонтные компании, у которых несколько объектов и прорабы в Telegram</dd></div>
+          <div><dt>Стек</dt><dd><div class="stack"><span>Telegram Bot API</span><span>Whisper</span><span>LLM</span><span>Next.js</span><span>Supabase</span></div></dd></div>
+          <div><dt>Демо</dt><dd><a href="https://probudyvshysya.github.io/konveyer/stroyka/">открыть пульт стройки</a></dd></div>
+        </dl>
+      </aside>
+      <div class="body">
+        <h3 id="c5">Пульт стройки: прораб говорит, панель владельца считает</h3>
+        <p>Прораб записывает голосовое в Telegram, как привык: что залили, сколько людей вышло, что нужно привезти завтра, какой акт готов. Бот расшифровывает речь, модель раскладывает её по объектам, а владелец видит один экран: выручку против плана, прогноз на конец месяца, сколько можно выставить клиенту прямо сейчас и какой объект горит красным по срокам, деньгам, снабжению, людям, качеству или актам.</p>
+        <div class="flow" aria-label="Схема пульта стройки">
+          <div>голосовое<small>прораб в Telegram</small></div>
+          <div>расшифровка<small>Whisper</small></div>
+          <div>разбор<small>объект, работы, заявки</small></div>
+          <div>панель<small>6 параметров на объект</small></div>
+          <div>сигнал<small>владельцу, если красное</small></div>
+        </div>
+        <p>Люди не саботируют такую систему, потому что для них ничего не меняется: голосовое они и так записывают. В демо четыре сообщения за день, и панель меняется после каждого. Данные выдуманы.</p>
       </div>
     </article>
   </section>
