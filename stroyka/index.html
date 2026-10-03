@@ -11,11 +11,18 @@
 <style>
 /* Раскладка: слева телефон прораба (вход), справа рабочее место выбранной роли (выход); тёмная диспетчерская, один янтарный акцент */
 :root{
-  --bg:#0D1524; --panel:#141F33; --panel2:#1A2840; --raise:#22324F; --ink:#EAF0F8; --muted:#94A4BD; --line:#26375A;
-  --accent:#F5B83D; --ok:#3DD68C; --warn:#F5B83D; --bad:#FF6B5B; --blue:#64A5FF; --chat:#1E2D49; --me:#1E3B33;
+  --bg:#F3F5F9; --panel:#FFFFFF; --panel2:#F2F5FA; --raise:#E4E9F1; --ink:#13203A; --muted:#5C6B84; --line:#D8DFEA;
+  --accent:#E39A00; --acc-ink:#A86F00; --on-acc:#1A1405; --ok:#14A05C; --warn:#D48A00; --bad:#E0483A; --blue:#2F78EE;
+  --chat:#EAF0F8; --me:#E2F4EA; --quote:#2A3852; --stripe1:#E7ECF4; --stripe2:#DDE4EF; --shadow:0 1px 2px rgba(19,32,58,.06),0 6px 20px rgba(19,32,58,.06);
   --display:"Unbounded","Arial Black",system-ui,sans-serif;
   --body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
   --mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  color-scheme:light;
+}
+:root[data-theme="dark"]{
+  --bg:#0D1524; --panel:#141F33; --panel2:#1A2840; --raise:#22324F; --ink:#EAF0F8; --muted:#94A4BD; --line:#26375A;
+  --accent:#F5B83D; --acc-ink:#F5B83D; --on-acc:#14110A; --ok:#3DD68C; --warn:#F5B83D; --bad:#FF6B5B; --blue:#64A5FF;
+  --chat:#1E2D49; --me:#1E3B33; --quote:#D6DEEA; --stripe1:#22324F; --stripe2:#1C2A44; --shadow:none;
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -33,8 +40,10 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-off
 /* шапка */
 .top{display:flex;justify-content:space-between;align-items:flex-end;gap:18px;flex-wrap:wrap;padding-bottom:18px;border-bottom:1px solid var(--line)}
 .top h1{font-family:var(--display);font-weight:700;font-size:clamp(22px,3vw,34px);line-height:1.12;margin-top:8px}
-.top h1 em{font-style:normal;color:var(--accent)}
+.top h1 em{font-style:normal;color:var(--acc-ink)}
 .top p{color:var(--muted);margin-top:10px;max-width:72ch}
+.themebtn{appearance:none;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:6px 12px;font-size:12.5px;cursor:pointer;color:var(--ink)}
+.topright{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .badge{font-family:var(--mono);font-size:12px;border:1px dashed var(--muted);border-radius:4px;padding:5px 9px;color:var(--muted);white-space:nowrap}
 
 /* полоса «как это работает» */
@@ -42,14 +51,14 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-off
 .how div{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:12px 14px;min-width:0}
 .how b{display:block;font-size:14px}
 .how span{display:block;font-size:12.5px;color:var(--muted);margin-top:2px}
-.how i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--accent)}
+.how i{font-style:normal;font-family:var(--mono);font-size:11px;color:var(--acc-ink)}
 
 .grid{display:grid;grid-template-columns:minmax(0,370px) minmax(0,1fr);gap:20px;margin-top:20px;align-items:start}
 
 /* телефон прораба */
-.phone{background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;min-width:0;display:flex;flex-direction:column}
+.phone{background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);overflow:hidden;min-width:0;display:flex;flex-direction:column}
 .phone .bar{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line);background:var(--panel2)}
-.ava{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;flex:none;background:var(--accent);color:#14110A}
+.ava{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:14px;flex:none;background:var(--accent);color:var(--on-acc)}
 .phone .bar b{display:block;font-size:14.5px}
 .phone .bar span{font-size:12px;color:var(--muted)}
 .feed{padding:12px;display:flex;flex-direction:column;gap:10px;height:440px;overflow-y:auto;background:var(--bg)}
@@ -59,12 +68,12 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-off
 .msg .voice{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:11.5px;color:var(--muted);margin-bottom:5px}
 .wave{display:flex;gap:2px;align-items:center;height:14px}
 .wave i{width:2px;background:var(--muted);border-radius:1px}
-.msg .t{font-style:italic;color:#D6DEEA}
+.msg .t{font-style:italic;color:var(--quote)}
 .msg .meta{font-size:11px;color:var(--muted);margin-top:4px;text-align:right}
 .msg ul{margin:6px 0 0;padding-left:16px;display:grid;gap:3px}
-.msg ul b{color:var(--accent);font-weight:600}
+.msg ul b{color:var(--acc-ink);font-weight:600}
 .send{padding:12px;border-top:1px solid var(--line);display:flex;flex-direction:column;gap:8px;background:var(--panel2)}
-.btn{appearance:none;border:0;background:var(--accent);color:#14110A;font-weight:700;font-size:14px;padding:12px 14px;border-radius:8px;cursor:pointer;width:100%}
+.btn{appearance:none;border:0;background:var(--accent);color:var(--on-acc);font-weight:700;font-size:14px;padding:12px 14px;border-radius:8px;cursor:pointer;width:100%}
 .btn:disabled{opacity:.4;cursor:default}
 .btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line);font-weight:500}
 .hint{font-size:12px;color:var(--muted);text-align:center}
@@ -76,25 +85,25 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-off
 .fact{display:flex;gap:10px;align-items:flex-start;font-size:13.5px}
 .fact .k{flex:none;width:76px;color:var(--muted);font-size:12px;padding-top:1px}
 .route{display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--panel2);border-radius:8px;padding:8px 10px;font-size:13px}
-.route .arrow{color:var(--accent);font-family:var(--mono)}
+.route .arrow{color:var(--acc-ink);font-family:var(--mono)}
 .who{display:inline-flex;align-items:center;gap:6px;font-weight:600}
-.dotr{width:20px;height:20px;border-radius:50%;display:inline-grid;place-items:center;font-size:10.5px;font-weight:700;color:#0D1524;flex:none}
+.dotr{width:20px;height:20px;border-radius:50%;display:inline-grid;place-items:center;font-size:10.5px;font-weight:700;color:#fff;flex:none}
 
 /* вкладки ролей */
 .roles{display:flex;gap:6px;flex-wrap:wrap}
 .role{appearance:none;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:7px 12px 7px 7px;display:inline-flex;align-items:center;gap:8px;cursor:pointer;font-size:13.5px}
 .role[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
-.role .cnt{font-family:var(--mono);font-size:11px;background:var(--accent);color:#14110A;border-radius:999px;padding:0 6px;min-width:18px;text-align:center}
+.role .cnt{font-family:var(--mono);font-size:11px;background:var(--accent);color:var(--on-acc);border-radius:999px;padding:0 6px;min-width:18px;text-align:center}
 .role .cnt[data-z="0"]{display:none}
 
 .view{margin-top:14px;display:flex;flex-direction:column;gap:14px;min-width:0}
-.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:16px;min-width:0;box-shadow:var(--shadow)}
 .card h2{font-size:15.5px;font-weight:600}
 .card .sub{font-size:12.5px;color:var(--muted);margin-top:2px}
 .headrow{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
 
 .kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
-.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0;transition:border-color .4s}
+.kpi{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px;min-width:0;transition:border-color .4s;box-shadow:var(--shadow)}
 .kpi b{display:block;font-family:var(--display);font-weight:500;font-size:clamp(19px,2vw,25px);margin-top:6px;line-height:1.1}
 .kpi span{display:block;font-size:12.5px;color:var(--muted);margin-top:5px}
 .kpi.hl{border-color:var(--accent)}
@@ -122,7 +131,7 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-off
 .task.done{opacity:.55}
 .task.done .ttl{text-decoration:line-through}
 .st{font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:999px;white-space:nowrap;border:1px solid var(--line)}
-.st.s-new{color:var(--accent);border-color:var(--accent)}
+.st.s-new{color:var(--acc-ink);border-color:var(--accent)}
 .st.s-work{color:var(--blue);border-color:var(--blue)}
 .st.s-done{color:var(--ok);border-color:var(--ok)}
 .act{appearance:none;border:1px solid var(--line);background:var(--raise);border-radius:8px;padding:7px 10px;font-size:12.5px;cursor:pointer;white-space:nowrap}
@@ -146,25 +155,53 @@ button:focus-visible,a:focus-visible{outline:3px solid var(--accent);outline-off
 .stp::before{content:"";position:absolute;left:10px;top:20px;bottom:0;width:2px;background:var(--line)}
 .stp:last-child::before{display:none}
 .stp i{width:22px;height:22px;border-radius:50%;border:2px solid var(--line);background:var(--bg);display:grid;place-items:center;font-style:normal;font-size:11px}
-.stp.ok i{background:var(--ok);border-color:var(--ok);color:#0D1524}
+.stp.ok i{background:var(--ok);border-color:var(--ok);color:#fff}
 .stp.cur i{border-color:var(--accent)}
 .stp b{font-size:14px}.stp span{display:block;font-size:12.5px;color:var(--muted)}
-.photo{height:120px;border-radius:10px;background:repeating-linear-gradient(135deg,#22324F 0 14px,#1C2A44 14px 28px);display:grid;place-items:center;color:var(--muted);font-size:12.5px;text-align:center;padding:10px}
+.photo{height:120px;border-radius:10px;background:repeating-linear-gradient(135deg,var(--stripe1) 0 14px,var(--stripe2) 14px 28px);display:grid;place-items:center;color:var(--muted);font-size:12.5px;text-align:center;padding:10px}
 .bill{display:flex;justify-content:space-between;align-items:center;gap:10px;background:var(--panel2);border-radius:10px;padding:12px;margin-top:10px;flex-wrap:wrap}
 
 /* шаблон */
 .tpl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
 .rules{display:grid;gap:8px;margin-top:10px}
 .rule{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:10px;align-items:center;background:var(--panel2);border-radius:8px;padding:9px 10px;font-size:13px}
-.rule .arrow{color:var(--accent);font-family:var(--mono)}
+.rule .arrow{color:var(--acc-ink);font-family:var(--mono)}
 .rule.fired{box-shadow:0 0 0 1.5px var(--accent)}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
 .chips span{font-size:12.5px;padding:4px 9px;border-radius:999px;background:var(--panel2);border:1px solid var(--line)}
 
 /* уведомление */
-.toast{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);border-radius:10px;padding:10px 14px;font-size:13.5px;max-width:min(360px,calc(100vw - 32px));box-shadow:0 8px 30px rgba(0,0,0,.4);opacity:0;transform:translateY(8px);transition:opacity .25s,transform .25s;pointer-events:none;z-index:10}
+.toast{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);border-radius:10px;padding:10px 14px;font-size:13.5px;max-width:min(360px,calc(100vw - 32px));box-shadow:0 8px 30px rgba(0,0,0,.25);opacity:0;transform:translateY(8px);transition:opacity .25s,transform .25s;pointer-events:none;z-index:10}
 .toast.on{opacity:1;transform:none}
 
+
+/* экономика */
+.eco{margin-top:24px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:clamp(16px,3vw,26px);box-shadow:var(--shadow)}
+.eco h2{font-family:var(--display);font-weight:500;font-size:clamp(20px,2.4vw,28px);line-height:1.2}
+.eco .lead{color:var(--muted);margin-top:8px;max-width:78ch}
+.ecogrid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:22px;margin-top:18px;align-items:start}
+.inputs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
+.inputs label{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted);min-width:0}
+.inputs input{font:500 15px var(--body);color:var(--ink);background:var(--panel2);border:1px solid var(--line);border-radius:8px;padding:8px 10px;width:100%;font-variant-numeric:tabular-nums}
+.inputs input:focus{outline:2px solid var(--accent);outline-offset:1px}
+.inputs .grp{grid-column:1/-1;font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--acc-ink);margin-top:6px}
+.res{display:grid;gap:12px}
+.line{background:var(--panel2);border-radius:10px;padding:12px 14px}
+.line .h{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.line b{font-size:14.5px}
+.line .v{font-family:var(--display);font-weight:500;font-size:20px;font-variant-numeric:tabular-nums}
+.line .how2{font-size:12.5px;color:var(--muted);margin-top:4px}
+.line .bar{height:8px;border-radius:4px;background:var(--raise);margin-top:8px;overflow:hidden}
+.line .bar i{display:block;height:100%;background:var(--ok);transition:width .4s}
+.total{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.total div{border:1.5px solid var(--line);border-radius:10px;padding:12px;min-width:0}
+.total div.main{border-color:var(--ok)}
+.total span{display:block;font-size:12px;color:var(--muted)}
+.total b{display:block;font-family:var(--display);font-weight:500;font-size:clamp(18px,2vw,24px);margin-top:4px;font-variant-numeric:tabular-nums}
+.total .main b{color:var(--ok)}
+.fine{font-size:12.5px;color:var(--muted);margin-top:10px}
+@media (max-width:960px){.ecogrid{grid-template-columns:1fr}}
+@media (max-width:560px){.inputs{grid-template-columns:1fr}.total{grid-template-columns:1fr}}
 footer{margin-top:28px;font-size:13px;color:var(--muted);display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
 
 @media (max-width:1060px){.objs{grid-template-columns:repeat(2,minmax(0,1fr))}}
@@ -193,7 +230,7 @@ footer{margin-top:28px;font-size:13px;color:var(--muted);display:flex;justify-co
       <h1>Прораб говорит. Система <em>раздаёт задачи</em> и следит, чтобы ничего не встало</h1>
       <p>Голосовое прораба в Telegram превращается в задачи с ответственным и сроком: снабжению заказать материал, финансам выставить акт и позвонить по оплате, владельцу решить, что горит. У каждого сотрудника свой экран, клиент видит свой отчёт. Нажмите кнопку слева и переключайтесь между ролями.</p>
     </div>
-    <div class="badge">демо · данные выдуманы</div>
+    <div class="topright"><button class="themebtn" id="theme" type="button">Тёмная тема</button><div class="badge">демо · данные выдуманы</div></div>
   </header>
 
   <div class="how" aria-label="Как это работает">
@@ -227,6 +264,46 @@ footer{margin-top:28px;font-size:13px;color:var(--muted);display:flex;justify-co
     </div>
   </div>
 
+  <section class="eco" id="ekonomika" aria-labelledby="h-eco">
+    <div class="label">Экономика</div>
+    <h2 id="h-eco" style="margin-top:6px">Сколько денег это возвращает в месяц</h2>
+    <p class="lead">Прибыль строительной компании съедают не только цены, но и издержки, которых не видно в отчётах: бригада стоит и ждёт материал, акт выставили через неделю, владелец полдня собирает картину по телефону. Подставьте свои цифры, расчёт обновится сразу. Цифры по умолчанию — пример для компании с тремя объектами, а не обещание.</p>
+    <div class="ecogrid">
+      <div class="inputs" id="eco-in">
+        <div class="grp">Простои бригад</div>
+        <label for="e-obj">Объектов одновременно<input id="e-obj" type="number" min="0" step="1" value="3"></label>
+        <label for="e-ppl">Рабочих на объекте<input id="e-ppl" type="number" min="0" step="1" value="6"></label>
+        <label for="e-shift">Смена рабочего, ₽<input id="e-shift" type="number" min="0" step="100" value="4500"></label>
+        <label for="e-idle">Дней простоя на объект в месяц<input id="e-idle" type="number" min="0" step="0.5" value="2"></label>
+        <label for="e-idlecut">Сколько простоев снимаем, %<input id="e-idlecut" type="number" min="0" step="1" value="50"></label>
+        <div class="grp">Деньги в невыставленных актах</div>
+        <label for="e-acts">Актов в месяц, ₽<input id="e-acts" type="number" min="0" step="100000" value="9500000"></label>
+        <label for="e-delay">Задержка с выставлением, дней<input id="e-delay" type="number" min="0" step="1" value="5"></label>
+        <label for="e-rate">Стоимость денег, % годовых<input id="e-rate" type="number" min="0" step="0.5" value="22"></label>
+        <div class="grp">Время на звонки и сводки</div>
+        <label for="e-own">Владелец, часов в день<input id="e-own" type="number" min="0" step="0.5" value="1.5"></label>
+        <label for="e-ownh">Час владельца, ₽<input id="e-ownh" type="number" min="0" step="100" value="2000"></label>
+        <label for="e-fore">Прорабов<input id="e-fore" type="number" min="0" step="1" value="2"></label>
+        <label for="e-foreh">Прораб: часов на отчёты в день<input id="e-foreh" type="number" min="0" step="0.5" value="1"></label>
+        <label for="e-forer">Час прораба, ₽<input id="e-forer" type="number" min="0" step="50" value="700"></label>
+        <label for="e-timecut">Сколько времени экономим, %<input id="e-timecut" type="number" min="0" step="1" value="60"></label>
+        <div class="grp">Система</div>
+        <label for="e-price">Стоимость в месяц, ₽<input id="e-price" type="number" min="0" step="1000" value="15000"></label>
+      </div>
+      <div class="res">
+        <div class="line"><div class="h"><b>Меньше простоев бригад</b><span class="v" id="r-idle">—</span></div><div class="how2" id="h-idle"></div><div class="bar"><i id="b-idle"></i></div></div>
+        <div class="line"><div class="h"><b>Акты выставляются в день сдачи работ</b><span class="v" id="r-acts">—</span></div><div class="how2" id="h-acts"></div><div class="bar"><i id="b-acts"></i></div></div>
+        <div class="line"><div class="h"><b>Меньше звонков и ручных сводок</b><span class="v" id="r-time">—</span></div><div class="how2" id="h-time"></div><div class="bar"><i id="b-time"></i></div></div>
+        <div class="total">
+          <div class="main"><span>Возвращает в месяц</span><b id="t-sum">—</b></div>
+          <div><span>За вычетом системы</span><b id="t-net">—</b></div>
+          <div><span>Окупается за</span><b id="t-pay">—</b></div>
+        </div>
+        <p class="fine">Не входит в расчёт, но тоже про деньги: штрафы заказчика за срыв сдачи, просроченные оплаты, о которых никто не напомнил, и клиенты, которые не вернулись после плохой стройки.</p>
+      </div>
+    </div>
+  </section>
+
   <footer>
     <span>Telegram-бот, распознавание речи, разбор моделью, роли и задачи, веб-панель. Настраивается под вашу компанию. <a href="../">Портфолио и контакты</a></span>
     <span>Telegram @official_konveyer</span>
@@ -236,6 +313,10 @@ footer{margin-top:28px;font-size:13px;color:var(--muted);display:flex;justify-co
 
 <script>
 (function(){
+  var tb=document.getElementById('theme');
+  function setTheme(d){ if(d) document.documentElement.setAttribute('data-theme','dark'); else document.documentElement.removeAttribute('data-theme'); tb.textContent=d?'Светлая тема':'Тёмная тема'; try{localStorage.setItem('konv-theme',d?'dark':'light');}catch(e){} }
+  try{ if(localStorage.getItem('konv-theme')==='dark') setTheme(true); }catch(e){}
+  tb.addEventListener('click',function(){ setTheme(document.documentElement.getAttribute('data-theme')!=='dark'); });
   var PEOPLE = {
     owner:  {name:'Андрей', role:'Владелец', color:'#F5B83D', f:0},
     fore:   {name:'Сергей', role:'Прораб', color:'#64A5FF', f:0},
@@ -434,6 +515,35 @@ footer{margin-top:28px;font-size:13px;color:var(--muted);display:flex;justify-co
   document.getElementById('next').addEventListener('click', next);
   document.getElementById('reset').addEventListener('click', reset);
   reset();
+})();
+</script>
+
+<script>
+(function(){
+  function v(id){ var x=parseFloat(document.getElementById(id).value); return isNaN(x)?0:x; }
+  function rub(x){ return Math.round(x).toLocaleString('ru-RU')+' ₽'; }
+  function dney(n){ var a=n%10, b=n%100; if(a===1&&b!==11) return 'день'; if(a>=2&&a<=4&&(b<10||b>=20)) return 'дня'; return 'дней'; }
+  function calc(){
+    var idle=v('e-obj')*v('e-ppl')*v('e-shift')*v('e-idle')*v('e-idlecut')/100;
+    var acts=v('e-acts')*v('e-rate')/100*Math.max(0,v('e-delay')-1)/365;
+    var time=(v('e-own')*v('e-ownh')+v('e-fore')*v('e-foreh')*v('e-forer'))*22*v('e-timecut')/100;
+    var sum=idle+acts+time, price=v('e-price'), mx=Math.max(idle,acts,time,1);
+    document.getElementById('r-idle').textContent=rub(idle);
+    document.getElementById('h-idle').textContent=v('e-obj')+' об. × '+v('e-ppl')+' чел. × '+rub(v('e-shift'))+' × '+v('e-idle')+' дн. простоя. Заявка снабжению уходит в момент голосового, поэтому снимаем '+v('e-idlecut')+' %';
+    document.getElementById('r-acts').textContent=rub(acts);
+    document.getElementById('h-acts').textContent='Задержка '+v('e-delay')+' дн. сокращается до 1 дня: деньги приходят раньше и не стоят '+v('e-rate')+' % годовых';
+    document.getElementById('r-time').textContent=rub(time);
+    document.getElementById('h-time').textContent='Владелец и прорабы, 22 рабочих дня. Картина по объектам собирается сама, экономим '+v('e-timecut')+' %';
+    document.getElementById('b-idle').style.width=(idle/mx*100)+'%';
+    document.getElementById('b-acts').style.width=(acts/mx*100)+'%';
+    document.getElementById('b-time').style.width=(time/mx*100)+'%';
+    document.getElementById('t-sum').textContent=rub(sum);
+    document.getElementById('t-net').textContent=rub(sum-price);
+    var days=sum>0?Math.ceil(price/(sum/30)):0;
+    document.getElementById('t-pay').textContent=sum>0?(days+' '+dney(days)):'—';
+  }
+  document.getElementById('eco-in').addEventListener('input', calc);
+  calc();
 })();
 </script>
 </body>

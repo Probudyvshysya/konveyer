@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta property="og:title" content="Конвейер — подрядчик для агентств">
-<meta property="og:description" content="Python-автоматизация, разбор документов, Telegram-боты с ИИ, веб-системы и ИИ-ролики">
+<meta property="og:title" content="Конвейер — автоматизация для бизнеса">
+<meta property="og:description" content="Python-автоматизация, разбор документов, Telegram-боты с ИИ, веб-системы">
 <title>Конвейер</title>
 <meta name="description" content="Python-автоматизация, разбор документов, Telegram-боты с ИИ, веб-системы и ИИ-ролики под бренд агентства">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -20,9 +20,6 @@
   --mono:"IBM Plex Mono",ui-monospace,"Cascadia Mono",Consolas,monospace;
   --wrap:1120px; --gut:clamp(16px,4vw,40px);
 }
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --paper:#101315; --panel:#171B1E; --ink:#E7EAE5; --muted:#9BA4AB; --line:#2A3035; --soft:#1D2226;
-  --signal:#F0B21A; --ok:#36B56C; --warn:#F0B21A; --bad:#E85A48; --code:#0B0D0F; --code-fg:#D9DED8; color-scheme:dark}}
 :root[data-theme="dark"]{
   --paper:#101315; --panel:#171B1E; --ink:#E7EAE5; --muted:#9BA4AB; --line:#2A3035; --soft:#1D2226;
   --signal:#F0B21A; --ok:#36B56C; --warn:#F0B21A; --bad:#E85A48; --code:#0B0D0F; --code-fg:#D9DED8; color-scheme:dark}
@@ -46,6 +43,8 @@ p{margin:0}
 .top nav{display:flex;gap:18px;flex-wrap:wrap;font-size:14px}
 .top nav a{text-decoration:none;color:var(--muted)}
 .top nav a:hover{color:var(--ink)}
+.themebtn{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:999px;padding:5px 11px;font:13px var(--body);cursor:pointer}
+.topright{display:flex;gap:18px;align-items:center;flex-wrap:wrap}
 
 /* герой */
 .hero{padding-block:clamp(40px,7vw,84px) clamp(32px,5vw,56px);display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(28px,4vw,56px);align-items:start}
@@ -184,13 +183,13 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:13px}
 <header class="top">
   <div class="wrap">
     <div class="brand"><i aria-hidden="true"></i>Конвейер</div>
-    <nav aria-label="Разделы">
+    <div class="topright"><nav aria-label="Разделы">
       <a href="#uslugi">Что делаем</a>
       <a href="#keysy">Кейсы</a>
       <a href="#bezopasnost">Безопасность</a>
       <a href="#usloviya">Условия</a>
       <a href="#kontakty">Контакты</a>
-    </nav>
+    </nav><button class="themebtn" id="theme" type="button">Тёмная тема</button></div>
   </div>
 </header>
 
@@ -532,6 +531,10 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:13px}
 
 <script>
 (function(){
+  var tb=document.getElementById('theme');
+  function setTheme(d){ if(d) document.documentElement.setAttribute('data-theme','dark'); else document.documentElement.removeAttribute('data-theme'); tb.textContent=d?'Светлая тема':'Тёмная тема'; try{localStorage.setItem('konv-theme',d?'dark':'light');}catch(e){} }
+  try{ if(localStorage.getItem('konv-theme')==='dark') setTheme(true); }catch(e){}
+  tb.addEventListener('click',function(){ setTheme(document.documentElement.getAttribute('data-theme')!=='dark'); });
   var states=[
     {on:'lr',txt:'Сейчас горит красный: смета пришла сканом, и система отказалась выносить вердикт по неполному комплекту.'},
     {on:'ly',txt:'Жёлтый: прогон прошёл, но новых данных ноль. Это факт, а не поломка, и система пишет об этом отдельно.'},
