@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta property="og:title" content="Конвейер — подрядчик для агентств">
-<meta property="og:description" content="Python-автоматизация, разбор документов, Telegram-боты с ИИ, веб-системы и ИИ-ролики под бренд агентства">
+<meta property="og:description" content="Python-автоматизация, разбор документов, Telegram-боты с ИИ, веб-системы и ИИ-ролики">
 <title>Конвейер</title>
 <meta name="description" content="Python-автоматизация, разбор документов, Telegram-боты с ИИ, веб-системы и ИИ-ролики под бренд агентства">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -278,7 +278,7 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:13px}
       <article class="svc">
         <div class="label">стройка · ремонт · голос</div>
         <h3>Панель владельца из голосовых прорабов</h3>
-        <p>Прораб пишет голосовое в Telegram, а владелец видит выручку против плана, прогноз месяца и объекты по шести параметрам. <a href="https://probudyvshysya.github.io/konveyer/stroyka/">Демо</a>.</p>
+        <p>Голосовое прораба превращается в задачи снабжению, финансам и владельцу. У каждой роли свой экран, клиент видит свой отчёт. <a href="https://probudyvshysya.github.io/konveyer/stroyka/">Демо</a>.</p>
         <div class="price"><span>по задаче</span><span>пилот от 10 дней</span></div>
       </article>
     </div>
@@ -418,16 +418,16 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:13px}
         </dl>
       </aside>
       <div class="body">
-        <h3 id="c5">Пульт стройки: прораб говорит, панель владельца считает</h3>
-        <p>Прораб записывает голосовое в Telegram, как привык: что залили, сколько людей вышло, что нужно привезти завтра, какой акт готов. Бот расшифровывает речь, модель раскладывает её по объектам, а владелец видит один экран: выручку против плана, прогноз на конец месяца, сколько можно выставить клиенту прямо сейчас и какой объект горит красным по срокам, деньгам, снабжению, людям, качеству или актам.</p>
+        <h3 id="c5">Пульт стройки: прораб говорит, система раздаёт задачи</h3>
+        <p>Прораб записывает голосовое в Telegram, как привык. Система понимает, о каком объекте речь и что случилось, и сама ставит задачи с ответственным и сроком: снабжению заказать материал, финансам выставить акт и позвонить заказчику по оплате, владельцу решить, если горит срок. У каждого сотрудника свой экран и свой доступ, заказчик видит только свой объект: этапы, фото и счета.</p>
         <div class="flow" aria-label="Схема пульта стройки">
           <div>голосовое<small>прораб в Telegram</small></div>
-          <div>расшифровка<small>Whisper</small></div>
-          <div>разбор<small>объект, работы, заявки</small></div>
-          <div>панель<small>6 параметров на объект</small></div>
-          <div>сигнал<small>владельцу, если красное</small></div>
+          <div>разбор<small>объект, работы, материалы, деньги</small></div>
+          <div>задачи<small>кому, к какому сроку и почему</small></div>
+          <div>роли<small>владелец, снабжение, финансы</small></div>
+          <div>клиент<small>отчёт и счёт без звонков</small></div>
         </div>
-        <p>Люди не саботируют такую систему, потому что для них ничего не меняется: голосовое они и так записывают. В демо четыре сообщения за день, и панель меняется после каждого. Данные выдуманы.</p>
+        <p>Каркас один для всех строительных компаний: роли, этапы и правила «что из голосового кому» настраиваются под конкретную компанию за 2–3 дня. В демо четыре голосовых за рабочий день, задачи можно брать в работу и закрывать. Данные выдуманы.</p>
       </div>
     </article>
   </section>
@@ -505,7 +505,7 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:13px}
     </div>
     <div class="terms">
       <div><b>Под вашим брендом</b><span>Результат уходит клиенту от вас, наше имя нигде не появляется</span></div>
-      <div><b>Договор с ИП</b><span>Акты и закрывающие документы, УСН без НДС</span></div>
+      <div><b>Официальный договор</b><span>Акты и закрывающие документы, без НДС</span></div>
       <div><b>Фиксированная цена</b><span>Называем до начала. Оплата половина вперёд, половина по сдаче</span></div>
       <div><b>Часовой пояс</b><span>Новосибирск, МСК+4. Работаем и по московскому времени</span></div>
       <div><b>Бесплатная проба</b><span>Один ролик на вашего клиента или разбор 10–20 ваших документов</span></div>
@@ -521,7 +521,6 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:13px}
     </div>
     <div class="rows">
       <div class="row"><span class="label">Telegram</span><span class="v">@official_konveyer</span><button type="button" data-copy="@official_konveyer">Копировать</button></div>
-      <div class="row"><span class="label">Почта</span><span class="v">spyaschiyprobudilsya@gmail.com</span><button type="button" data-copy="spyaschiyprobudilsya@gmail.com">Копировать</button></div>
       <div class="row"><span class="label">Код</span><span class="v"><a href="https://github.com/Probudyvshysya/doc-pipeline" style="color:inherit">github.com/Probudyvshysya</a></span></div>
       <div class="row"><span class="label">Связь</span><span class="v"><a href="https://t.me/official_konveyer" style="color:inherit">t.me/official_konveyer</a></span></div>
     </div>
@@ -529,7 +528,7 @@ footer{padding-block:28px 40px;color:var(--muted);font-size:13px}
 
 </main>
 
-<footer class="wrap">Конвейер · Дмитрий Ермаков, ИП · Новосибирск · 2026</footer>
+<footer class="wrap">Конвейер · 2026</footer>
 
 <script>
 (function(){
